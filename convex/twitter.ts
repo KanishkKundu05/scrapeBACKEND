@@ -4,7 +4,7 @@ import { internalMutation, query } from "./_generated/server";
 // Validator for tweet author
 const tweetAuthorValidator = v.object({
   id: v.string(),
-  username: v.string(),
+  userName: v.string(),
   name: v.string(),
 });
 
@@ -55,7 +55,7 @@ export const storeTweets = internalMutation({
         tweetId: tweet.id,
         text: tweet.text,
         authorId: tweet.author.id,
-        authorUsername: tweet.author.username,
+        authorUsername: tweet.author.userName,
         authorName: tweet.author.name,
         tweetCreatedAt: tweet.created_at,
         retweetCount: tweet.retweet_count,
