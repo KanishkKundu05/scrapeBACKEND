@@ -55,19 +55,34 @@ http.route({
       );
     }
 
-    // 3. Call internal mutation to store tweets
+    // 3. Normalize tweets to match validator schema
+    const normalizedTweets = payload.tweets.map((tweet: any) => ({
+      id: tweet.id,
+      text: tweet.text,
+      author: {
+        id: tweet.author.id,
+        userName: tweet.author.userName,
+        name: tweet.author.name,
+      },
+      created_at: tweet.created_at,
+      retweet_count: tweet.retweet_count,
+      like_count: tweet.like_count,
+      reply_count: tweet.reply_count,
+    }));
+
+    // 4. Call internal mutation to store tweets
     try {
       const result = await ctx.runMutation(internal.twitter.storeTweets, {
         payload: {
           event_type: payload.event_type,
           rule_id: payload.rule_id,
           rule_tag: payload.rule_tag,
-          tweets: payload.tweets,
+          tweets: normalizedTweets,
           timestamp: payload.timestamp,
         },
       });
 
-      // 4. Return success response with counts
+      // 5. Return success response with counts
       return new Response(
         JSON.stringify({
           success: true,
