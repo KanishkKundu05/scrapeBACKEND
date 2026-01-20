@@ -55,7 +55,7 @@ http.route({
       );
     }
 
-    // 3. Normalize tweets to match validator schema
+    // 3. Normalize tweets to match validator schema (API uses camelCase)
     const normalizedTweets = payload.tweets.map((tweet: any) => ({
       id: tweet.id,
       text: tweet.text,
@@ -64,10 +64,10 @@ http.route({
         userName: tweet.author.userName,
         name: tweet.author.name,
       },
-      created_at: tweet.created_at,
-      retweet_count: tweet.retweet_count,
-      like_count: tweet.like_count,
-      reply_count: tweet.reply_count,
+      created_at: tweet.createdAt || tweet.created_at || "",
+      retweet_count: tweet.retweetCount ?? tweet.retweet_count ?? 0,
+      like_count: tweet.likeCount ?? tweet.like_count ?? 0,
+      reply_count: tweet.replyCount ?? tweet.reply_count ?? 0,
     }));
 
     // 4. Call internal mutation to store tweets
